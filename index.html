@@ -23,8 +23,67 @@
       </nav>
 
       <a href="#contato" class="header-cta">Agendar consulta</a>
+
+      <button
+        type="button"
+        class="mobile-menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Abrir menu"
+      >
+        <span class="mobile-menu-toggle-lines" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+        <span class="mobile-menu-toggle-label">Menu</span>
+      </button>
     </div>
   </header>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" hidden>
+    <button type="button" class="mobile-menu-backdrop" aria-label="Fechar menu"></button>
+
+    <div class="mobile-menu-panel" role="dialog" aria-modal="true" aria-labelledby="mobile-menu-title">
+      <div class="mobile-menu-inner">
+        <div class="mobile-menu-top">
+          <div class="mobile-menu-heading">
+            <span class="mobile-menu-kicker" id="mobile-menu-title">Navega&ccedil;&atilde;o</span>
+            <span class="mobile-menu-brand">Eduardo Advocacia</span>
+          </div>
+
+          <button type="button" class="mobile-menu-close" aria-label="Fechar menu">Fechar</button>
+        </div>
+
+        <nav class="mobile-menu-nav" aria-label="Menu mobile">
+          <a href="#inicio" class="mobile-menu-link">
+            <span class="mobile-menu-index">01</span>
+            <span class="mobile-menu-text">In&iacute;cio</span>
+          </a>
+          <a href="#atuacao" class="mobile-menu-link">
+            <span class="mobile-menu-index">02</span>
+            <span class="mobile-menu-text">Atua&ccedil;&atilde;o</span>
+          </a>
+          <a href="#sobre" class="mobile-menu-link">
+            <span class="mobile-menu-index">03</span>
+            <span class="mobile-menu-text">Sobre</span>
+          </a>
+          <a href="#artigos" class="mobile-menu-link">
+            <span class="mobile-menu-index">04</span>
+            <span class="mobile-menu-text">Artigos</span>
+          </a>
+          <a href="#contato" class="mobile-menu-link">
+            <span class="mobile-menu-index">05</span>
+            <span class="mobile-menu-text">Contato</span>
+          </a>
+        </nav>
+
+        <div class="mobile-menu-footer">
+          <p>Atendimento jur&iacute;dico com estrat&eacute;gia, discri&ccedil;&atilde;o e leitura t&eacute;cnica.</p>
+          <a href="#contato" class="mobile-menu-cta">Agendar consulta</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <main>
 

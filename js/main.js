@@ -2,7 +2,28 @@ gsap.registerPlugin(ScrollTrigger);
 
 const header = document.querySelector(".header");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const mobileMenuBreakpoint = window.matchMedia("(max-width: 768px)");
+const mobileMenu = document.querySelector(".mobile-menu");
+const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
+const mobileMenuInner = document.querySelector(".mobile-menu-inner");
+const mobileMenuBackdrop = document.querySelector(".mobile-menu-backdrop");
+const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
+const mobileMenuClose = document.querySelector(".mobile-menu-close");
+const mobileMenuHeading = document.querySelector(".mobile-menu-heading");
+const mobileMenuFooter = document.querySelector(".mobile-menu-footer");
+const mobileMenuLinks = mobileMenu ? Array.from(mobileMenu.querySelectorAll(".mobile-menu-link")) : [];
+const mobileMenuAnchors = mobileMenu ? Array.from(mobileMenu.querySelectorAll('a[href^="#"]')) : [];
+const mobileMenuRevealTargets = [
+  mobileMenuHeading,
+  mobileMenuClose,
+  ...mobileMenuLinks,
+  mobileMenuFooter
+].filter(Boolean);
 let lenis = null;
+let mobileMenuAnimation = null;
+let isMobileMenuOpen = false;
+let mobileMenuTouchStartY = null;
+let mobileMenuTouchDeltaY = 0;
 
 const updateHeaderState = (scrollValue = window.scrollY) => {
   if (!header) {
@@ -10,6 +31,257 @@ const updateHeaderState = (scrollValue = window.scrollY) => {
   }
 
   header.classList.toggle("is-scrolled", scrollValue > 40);
+};
+
+const killMobileMenuAnimation = () => {
+  if (!mobileMenuAnimation) {
+    return;
+  }
+
+  mobileMenuAnimation.kill();
+  mobileMenuAnimation = null;
+};
+
+const setMobileMenuState = (isOpen) => {
+  isMobileMenuOpen = isOpen;
+
+  if (mobileMenuToggle) {
+    mobileMenuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  }
+
+  if (mobileMenu) {
+    mobileMenu.setAttribute("aria-hidden", isOpen ? "false" : "true");
+  }
+
+  document.body.classList.toggle("mobile-menu-open", isOpen);
+
+  if (lenis) {
+    if (isOpen) {
+      lenis.stop();
+    } else {
+      lenis.start();
+      ScrollTrigger.update();
+    }
+  }
+};
+
+const clearMobileMenuTransforms = () => {
+  if (!mobileMenuPanel || !mobileMenuBackdrop || !mobileMenuInner) {
+    return;
+  }
+
+  gsap.set(
+    [mobileMenuBackdrop, mobileMenuPanel, mobileMenuInner, ...mobileMenuRevealTargets],
+    { clearProps: "opacity,transform" }
+  );
+};
+
+const resetMobileMenuDrag = (animate = true) => {
+  if (
+    prefersReducedMotion ||
+    !mobileMenuPanel ||
+    !mobileMenuBackdrop ||
+    !mobileMenuInner
+  ) {
+    mobileMenuTouchDeltaY = 0;
+    return;
+  }
+
+  const duration = animate ? 0.34 : 0;
+
+  gsap.to(mobileMenuPanel, {
+    y: 0,
+    duration,
+    ease: "power3.out",
+    overwrite: true
+  });
+
+  gsap.to(mobileMenuInner, {
+    y: 0,
+    duration,
+    ease: "power3.out",
+    overwrite: true
+  });
+
+  gsap.to(mobileMenuBackdrop, {
+    opacity: 1,
+    duration: animate ? 0.22 : 0,
+    ease: "power2.out",
+    overwrite: true
+  });
+
+  mobileMenuTouchDeltaY = 0;
+};
+
+const openMobileMenu = () => {
+  if (!mobileMenu || !mobileMenuPanel || isMobileMenuOpen) {
+    return;
+  }
+
+  killMobileMenuAnimation();
+  mobileMenu.hidden = false;
+  setMobileMenuState(true);
+
+  if (prefersReducedMotion) {
+    clearMobileMenuTransforms();
+    mobileMenuClose?.focus();
+    return;
+  }
+
+  gsap.set(mobileMenuBackdrop, { opacity: 0 });
+  gsap.set(mobileMenuPanel, {
+    opacity: 1,
+    y: 72,
+    scale: 0.985
+  });
+  gsap.set(mobileMenuInner, { y: 0 });
+  gsap.set(mobileMenuRevealTargets, {
+    opacity: 0,
+    y: 28
+  });
+
+  mobileMenuAnimation = gsap.timeline({
+    defaults: {
+      ease: "power3.out"
+    },
+    onComplete: () => {
+      mobileMenuAnimation = null;
+      mobileMenuClose?.focus();
+    }
+  });
+
+  mobileMenuAnimation.to(mobileMenuBackdrop, {
+    opacity: 1,
+    duration: 0.28
+  }, 0);
+
+  mobileMenuAnimation.to(mobileMenuPanel, {
+    y: 0,
+    scale: 1,
+    duration: 0.54
+  }, 0);
+
+  mobileMenuAnimation.to(mobileMenuRevealTargets, {
+    opacity: 1,
+    y: 0,
+    duration: 0.46,
+    stagger: 0.06
+  }, 0.14);
+};
+
+const closeMobileMenu = ({ immediate = false, focusToggle = false } = {}) => {
+  if (!mobileMenu || mobileMenu.hidden) {
+    return;
+  }
+
+  killMobileMenuAnimation();
+
+  const finalize = () => {
+    mobileMenu.hidden = true;
+    mobileMenuTouchStartY = null;
+    setMobileMenuState(false);
+    clearMobileMenuTransforms();
+
+    if (focusToggle && mobileMenuToggle) {
+      mobileMenuToggle.focus();
+    }
+  };
+
+  if (immediate || prefersReducedMotion || !mobileMenuPanel || !mobileMenuBackdrop) {
+    finalize();
+    return;
+  }
+
+  mobileMenuAnimation = gsap.timeline({
+    defaults: {
+      ease: "power3.in"
+    },
+    onComplete: () => {
+      mobileMenuAnimation = null;
+      finalize();
+    }
+  });
+
+  mobileMenuAnimation.to(mobileMenuRevealTargets.slice().reverse(), {
+    opacity: 0,
+    y: 18,
+    duration: 0.18,
+    stagger: 0.03
+  }, 0);
+
+  mobileMenuAnimation.to(mobileMenuPanel, {
+    y: 86,
+    opacity: 0,
+    duration: 0.3
+  }, 0.06);
+
+  mobileMenuAnimation.to(mobileMenuBackdrop, {
+    opacity: 0,
+    duration: 0.22
+  }, 0.12);
+};
+
+const updateMobileMenuDrag = (deltaY) => {
+  if (
+    prefersReducedMotion ||
+    !mobileMenuPanel ||
+    !mobileMenuBackdrop ||
+    !mobileMenuInner
+  ) {
+    return;
+  }
+
+  const clampedDelta = Math.max(0, Math.min(deltaY, 240));
+
+  gsap.set(mobileMenuPanel, { y: clampedDelta });
+  gsap.set(mobileMenuInner, { y: clampedDelta * 0.14 });
+  gsap.set(mobileMenuBackdrop, {
+    opacity: Math.max(0.18, 1 - clampedDelta / 280)
+  });
+};
+
+const handleMobileMenuTouchStart = (event) => {
+  if (!isMobileMenuOpen || event.touches.length !== 1) {
+    return;
+  }
+
+  mobileMenuTouchStartY = event.touches[0].clientY;
+  mobileMenuTouchDeltaY = 0;
+};
+
+const handleMobileMenuTouchMove = (event) => {
+  if (!isMobileMenuOpen || mobileMenuTouchStartY === null) {
+    return;
+  }
+
+  mobileMenuTouchDeltaY = event.touches[0].clientY - mobileMenuTouchStartY;
+
+  if (mobileMenuTouchDeltaY <= 0) {
+    return;
+  }
+
+  event.preventDefault();
+  updateMobileMenuDrag(mobileMenuTouchDeltaY);
+};
+
+const handleMobileMenuTouchEnd = () => {
+  if (!isMobileMenuOpen || mobileMenuTouchStartY === null) {
+    return;
+  }
+
+  const shouldCloseMenu = mobileMenuTouchDeltaY > 110;
+  const shouldResetMenu = mobileMenuTouchDeltaY > 0;
+
+  mobileMenuTouchStartY = null;
+
+  if (shouldCloseMenu) {
+    closeMobileMenu({ focusToggle: true });
+    return;
+  }
+
+  if (shouldResetMenu) {
+    resetMobileMenuDrag();
+  }
 };
 
 if (!prefersReducedMotion && typeof Lenis !== "undefined") {
@@ -64,6 +336,58 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     });
   });
 });
+
+document.querySelectorAll('.blog-link[href="#"]').forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+  });
+});
+
+if (mobileMenuToggle && mobileMenu && mobileMenuPanel) {
+  mobileMenuToggle.addEventListener("click", () => {
+    openMobileMenu();
+  });
+
+  mobileMenuClose?.addEventListener("click", () => {
+    closeMobileMenu({ focusToggle: true });
+  });
+
+  mobileMenuBackdrop?.addEventListener("click", () => {
+    closeMobileMenu({ focusToggle: true });
+  });
+
+  mobileMenuAnchors.forEach((anchor) => {
+    anchor.addEventListener("click", () => {
+      closeMobileMenu();
+    });
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isMobileMenuOpen) {
+      closeMobileMenu({ focusToggle: true });
+    }
+  });
+
+  mobileMenuBreakpoint.addEventListener("change", (event) => {
+    if (!event.matches) {
+      closeMobileMenu({ immediate: true });
+    }
+  });
+
+  mobileMenuPanel.addEventListener("touchstart", handleMobileMenuTouchStart, {
+    passive: true
+  });
+
+  mobileMenuPanel.addEventListener("touchmove", handleMobileMenuTouchMove, {
+    passive: false
+  });
+
+  mobileMenuPanel.addEventListener("touchend", handleMobileMenuTouchEnd);
+  mobileMenuPanel.addEventListener("touchcancel", () => {
+    mobileMenuTouchStartY = null;
+    resetMobileMenuDrag();
+  });
+}
 
 updateHeaderState();
 
@@ -267,58 +591,197 @@ timeline.to(".hero-bg", {
   Reveals sutis das secoes seguintes
 */
 
-const createSectionReveal = (triggerSelector, targetSelector) => {
-  if (prefersReducedMotion || !document.querySelector(targetSelector)) {
-    return;
+const createSectionTimeline = (triggerSelector, start = "top 72%") => {
+  if (prefersReducedMotion || !document.querySelector(triggerSelector)) {
+    return null;
   }
 
-  gsap.from(targetSelector, {
-    opacity: 0,
-    y: 60,
-    duration: 0.9,
-    ease: "power2.out",
+  return gsap.timeline({
+    defaults: {
+      ease: "power3.out"
+    },
     scrollTrigger: {
       trigger: triggerSelector,
-      start: "top 78%",
+      start,
       once: true
     }
   });
 };
 
-createSectionReveal(".about-section", ".about-section .section-shell");
-createSectionReveal(".practice-section", ".practice-section .section-heading");
-createSectionReveal(".statement-section", ".statement-section .statement-shell");
-createSectionReveal(".blog-preview-section", ".blog-preview-header");
-createSectionReveal(".contact-section", ".contact-section .contact-shell");
+const isCompactViewport = mobileMenuBreakpoint.matches;
+const sectionMotion = {
+  aboutColumnsY: isCompactViewport ? 34 : 42,
+  cardY: isCompactViewport ? 56 : 70,
+  quoteY: isCompactViewport ? 38 : 50,
+  visualY: isCompactViewport ? 46 : 60,
+  panelY: isCompactViewport ? 40 : 50,
+  columnStagger: isCompactViewport ? 0.12 : 0.18,
+  cardStagger: isCompactViewport ? 0.1 : 0.15,
+  fieldStagger: isCompactViewport ? 0.04 : 0.06
+};
 
-if (!prefersReducedMotion && document.querySelector(".practice-grid")) {
-  gsap.from(".practice-card", {
+const aboutTimeline = createSectionTimeline(".about-section", "top 72%");
+
+if (aboutTimeline) {
+  aboutTimeline.from(".about-section .section-label", {
+    y: 24,
     opacity: 0,
-    y: 70,
-    duration: 0.9,
-    stagger: 0.14,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".practice-section",
-      start: "top 70%",
-      once: true
-    }
+    duration: 0.82
   });
+
+  aboutTimeline.from(".about-section .section-title", {
+    y: 60,
+    opacity: 0,
+    duration: 1.04
+  }, "-=0.46");
+
+  if (document.querySelector(".about-section .section-heading")) {
+    aboutTimeline.fromTo(".about-section .section-heading", {
+      "--section-rule-scale": 0
+    }, {
+      "--section-rule-scale": 1,
+      duration: 0.78
+    }, "-=0.72");
+  }
+
+  aboutTimeline.from(".about-section .about-column", {
+    y: sectionMotion.aboutColumnsY,
+    opacity: 0,
+    duration: 0.94,
+    stagger: sectionMotion.columnStagger
+  }, "-=0.34");
 }
 
-if (!prefersReducedMotion && document.querySelector(".blog-grid")) {
-  gsap.from(".blog-card", {
+const practiceTimeline = createSectionTimeline(".practice-section", "top 72%");
+
+if (practiceTimeline) {
+  practiceTimeline.from(".practice-section .section-label", {
+    y: 24,
     opacity: 0,
-    y: 70,
-    duration: 0.9,
-    stagger: 0.14,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".blog-preview-section",
-      start: "top 60%",
-      once: true
-    }
+    duration: 0.82
   });
+
+  practiceTimeline.from(".practice-section .section-title", {
+    y: 56,
+    opacity: 0,
+    duration: 0.98
+  }, "-=0.46");
+
+  if (document.querySelector(".practice-section .section-heading")) {
+    practiceTimeline.fromTo(".practice-section .section-heading", {
+      "--section-rule-scale": 0
+    }, {
+      "--section-rule-scale": 1,
+      duration: 0.72
+    }, "-=0.68");
+  }
+
+  practiceTimeline.from(".practice-card", {
+    y: sectionMotion.cardY,
+    opacity: 0,
+    duration: 0.96,
+    stagger: sectionMotion.cardStagger
+  }, "-=0.28");
+}
+
+const statementTimeline = createSectionTimeline(".statement-section", "top 74%");
+
+if (statementTimeline) {
+  statementTimeline.fromTo(".statement-section", {
+    "--statement-mark-opacity": 0,
+    "--statement-mark-scale": 0.88
+  }, {
+    "--statement-mark-opacity": 1,
+    "--statement-mark-scale": 1,
+    duration: 0.96
+  });
+
+  statementTimeline.from(".statement-quote", {
+    y: sectionMotion.quoteY,
+    opacity: 0,
+    duration: 1.02
+  }, "-=0.56");
+
+  statementTimeline.from(".statement-signature", {
+    y: 18,
+    opacity: 0,
+    duration: 0.78
+  }, "-=0.42");
+}
+
+const blogTimeline = createSectionTimeline(".blog-preview-section", "top 72%");
+
+if (blogTimeline) {
+  blogTimeline.from(".blog-preview-section .section-label", {
+    y: 22,
+    opacity: 0,
+    duration: 0.8
+  });
+
+  blogTimeline.from(".blog-preview-header h2", {
+    y: 56,
+    opacity: 0,
+    duration: 1
+  }, "-=0.44");
+
+  blogTimeline.from(".blog-preview-header p", {
+    y: 28,
+    opacity: 0,
+    duration: 0.84
+  }, "-=0.48");
+
+  blogTimeline.from(".blog-card", {
+    y: sectionMotion.cardY,
+    opacity: 0,
+    duration: 0.94,
+    stagger: sectionMotion.cardStagger
+  }, "-=0.24");
+}
+
+const contactTimeline = createSectionTimeline(".contact-section", "top 72%");
+
+if (contactTimeline) {
+  contactTimeline.from(".contact-visual-frame", {
+    y: sectionMotion.visualY,
+    opacity: 0,
+    duration: 0.96
+  });
+
+  contactTimeline.from(".contact-visual-main", {
+    y: 24,
+    scale: 0.94,
+    opacity: 0,
+    duration: 1
+  }, "-=0.72");
+
+  contactTimeline.from(".contact-panel", {
+    y: sectionMotion.panelY,
+    opacity: 0,
+    duration: 0.92
+  }, "-=0.68");
+
+  contactTimeline.from(".contact-panel .field-group, .contact-panel .contact-button", {
+    y: 18,
+    opacity: 0,
+    duration: 0.56,
+    stagger: sectionMotion.fieldStagger
+  }, "-=0.42");
+}
+
+const footerTimeline = createSectionTimeline(".site-footer", "top 88%");
+
+if (footerTimeline) {
+  footerTimeline.from(".site-footer .footer-top", {
+    y: 40,
+    opacity: 0,
+    duration: 0.86
+  });
+
+  footerTimeline.from(".site-footer .footer-bottom", {
+    y: 24,
+    opacity: 0,
+    duration: 0.68
+  }, "-=0.4");
 }
 
 window.addEventListener("load", () => {
