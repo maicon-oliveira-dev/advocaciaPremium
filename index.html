@@ -4,14 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Advocacia Premium</title>
+  <title>Escritório de Advocacia | Atuação Jurídica Estratégica e Institucional</title>
+  <meta
+    name="description"
+    content="Atuação jurídica com clareza, discrição e responsabilidade. Uma presença institucional pensada para comunicar confiança, técnica e organização."
+  />
 
+  <link rel="icon" href="data:," />
+  <link rel="preload" as="image" href="assets/hero/hero-assets/hero-full-composition.png" media="(max-width: 768px)" />
+  <link rel="preload" as="image" href="assets/hero/hero-assets/hero-base-image.png" media="(min-width: 769px)" />
+  <link rel="preload" as="image" href="assets/hero/hero-assets/hero-golden-light.png" media="(min-width: 769px)" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body data-theme="graphite">
 
   <header class="header">
-    <div class="logo">EDUARDO ADVOCACIA</div>
+    <div class="logo">NOME DO ESCRITÓRIO</div>
 
     <div class="header-actions">
       <nav class="nav">
@@ -22,7 +30,11 @@
         <a href="#contato">Contato</a>
       </nav>
 
-      <a href="#contato" class="header-cta">Agendar consulta</a>
+      <button type="button" class="theme-toggle" aria-label="Alternar tema visual" aria-pressed="false">
+        <span class="theme-toggle-label">Claro</span>
+      </button>
+
+      <a href="#contato" class="header-cta">Entrar em contato</a>
 
       <button
         type="button"
@@ -47,8 +59,8 @@
       <div class="mobile-menu-inner">
         <div class="mobile-menu-top">
           <div class="mobile-menu-heading">
-            <span class="mobile-menu-kicker" id="mobile-menu-title">Navega&ccedil;&atilde;o</span>
-            <span class="mobile-menu-brand">Eduardo Advocacia</span>
+            <span class="mobile-menu-kicker" id="mobile-menu-title">Navegação</span>
+            <span class="mobile-menu-brand">Nome do Escritório</span>
           </div>
 
           <button type="button" class="mobile-menu-close" aria-label="Fechar menu">Fechar</button>
@@ -57,11 +69,11 @@
         <nav class="mobile-menu-nav" aria-label="Menu mobile">
           <a href="#inicio" class="mobile-menu-link">
             <span class="mobile-menu-index">01</span>
-            <span class="mobile-menu-text">In&iacute;cio</span>
+            <span class="mobile-menu-text">Início</span>
           </a>
           <a href="#atuacao" class="mobile-menu-link">
             <span class="mobile-menu-index">02</span>
-            <span class="mobile-menu-text">Atua&ccedil;&atilde;o</span>
+            <span class="mobile-menu-text">Atuação</span>
           </a>
           <a href="#sobre" class="mobile-menu-link">
             <span class="mobile-menu-index">03</span>
@@ -78,8 +90,11 @@
         </nav>
 
         <div class="mobile-menu-footer">
-          <p>Atendimento jur&iacute;dico com estrat&eacute;gia, discri&ccedil;&atilde;o e leitura t&eacute;cnica.</p>
-          <a href="#contato" class="mobile-menu-cta">Agendar consulta</a>
+          <p>Atuação jurídica com clareza, discrição e presença institucional.</p>
+          <a href="#contato" class="mobile-menu-cta">Entrar em contato</a>
+          <button type="button" class="theme-toggle theme-toggle-mobile" aria-label="Alternar tema visual" aria-pressed="false">
+            <span class="theme-toggle-label">Claro</span>
+          </button>
         </div>
       </div>
     </div>
@@ -100,26 +115,99 @@
         <div class="scroll-line"></div>
       </div>
 
-      <img
-        src="assets/justica.png"
-        alt="Estátua da Justiça"
-        class="justice-statue"
-      />
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-parallax-scene">
+          <div class="hero-parallax-layer hero-base-parallax-layer">
+            <img
+              data-desktop-src="assets/hero/hero-assets/hero-base-image.png"
+              alt=""
+              class="hero-layer hero-base-layer"
+              decoding="async"
+              fetchpriority="high"
+              draggable="false"
+            />
+          </div>
+
+          <div class="hero-parallax-layer hero-golden-light-parallax-layer">
+            <div class="hero-parallax-scale hero-golden-light-parallax-scale">
+              <img
+                data-desktop-src="assets/hero/hero-assets/hero-golden-light.png"
+                alt=""
+                class="hero-layer hero-golden-light-layer"
+                decoding="async"
+                draggable="false"
+              />
+            </div>
+          </div>
+
+          <div class="hero-parallax-layer hero-text-mist-parallax-layer">
+            <div class="hero-parallax-scale hero-text-mist-parallax-scale">
+              <img
+                data-desktop-src="assets/hero/hero-assets/hero-text-mist.png"
+                alt=""
+                class="hero-layer hero-text-mist-layer"
+                decoding="async"
+                draggable="false"
+              />
+            </div>
+          </div>
+
+          <div class="hero-parallax-layer hero-sky-glow-parallax-layer">
+            <div class="hero-parallax-scale hero-sky-glow-parallax-scale">
+              <img
+                data-desktop-src="assets/hero/hero-assets/hero-sky-glow.png"
+                alt=""
+                class="hero-layer hero-sky-glow-layer"
+                decoding="async"
+                draggable="false"
+              />
+            </div>
+          </div>
+        </div>
+
+        <img
+          data-desktop-src="assets/hero/hero-assets/hero-edge-vignette.png"
+          alt=""
+          class="hero-layer hero-edge-vignette-layer"
+          decoding="async"
+          draggable="false"
+        />
+
+        <img
+          data-desktop-src="assets/hero/hero-assets/hero-shadow-overlay.png"
+          alt=""
+          class="hero-layer hero-shadow-overlay-layer"
+          decoding="async"
+          draggable="false"
+        />
+
+        <img
+          data-mobile-src="assets/hero/hero-assets/hero-full-composition.png"
+          alt=""
+          class="hero-mobile-composition"
+          decoding="async"
+          fetchpriority="high"
+          draggable="false"
+        />
+      </div>
+
+      <span class="sr-only">Estátua da Justiça em composição cinematográfica</span>
 
       <div class="hero-content hero-content-1">
         <div class="text-atmosphere text-atmosphere-1" aria-hidden="true"></div>
-        <span class="eyebrow">ADVOCACIA ESTRATÉGICA</span>
-        <h1>Precisão jurídica para decisões importantes.</h1>
+        <span class="eyebrow">ATUAÇÃO JURÍDICA ESTRATÉGICA</span>
+        <h1>Advocacia com clareza, discrição e confiança.</h1>
         <p>
-          Atuação técnica, elegante e estratégica para clientes que buscam segurança,
-          clareza e defesa em momentos decisivos.
+          Atuação orientada por análise técnica, comunicação objetiva e acompanhamento
+          responsável em demandas que exigem segurança jurídica.
         </p>
+        <a href="#contato" class="hero-mobile-cta">Entrar em contato</a>
       </div>
 
       <div class="hero-content hero-content-2">
         <div class="text-atmosphere text-atmosphere-2" aria-hidden="true"></div>
-        <span class="eyebrow">EXPERIÊNCIA PREMIUM</span>
-        <h2>Direito tratado com estratégia, presença e autoridade.</h2>
+        <span class="eyebrow">ATENDIMENTO ESTRUTURADO</span>
+        <h2>Cada caso exige leitura cuidadosa, estratégia bem definida e condução responsável.</h2>
       </div>
 
       <div class="hero-transition-panel" aria-hidden="true"></div>
@@ -129,23 +217,21 @@
       <div class="section-shell">
         <div class="section-heading">
           <span class="section-label">SOBRE O ESCRITÓRIO</span>
-          <h2 class="section-title">Advocacia construída com técnica, estratégia e presença.</h2>
+          <h2 class="section-title">Presença jurídica construída com técnica, proximidade e organização.</h2>
         </div>
 
         <div class="about-columns">
           <div class="about-column about-column-primary">
             <p>
-              Defendemos interesses com leitura técnica, clareza de cenário e atuação estratégica em
-              momentos que exigem segurança, discrição e autoridade. Cada caso é conduzido com atenção
-              ao detalhe, linguagem objetiva e visão jurídica orientada à decisão.
+              O escritório atua com atenção técnica, comunicação clara e acompanhamento
+              próximo, valorizando segurança jurídica e relações de confiança.
             </p>
           </div>
 
           <div class="about-column">
             <p>
-              O atendimento combina análise cuidadosa, comunicação transparente e presença institucional
-              consistente, para que o cliente tenha confiança no processo, previsibilidade nos próximos
-              passos e uma advocacia alinhada à complexidade real do seu contexto.
+              A apresentação institucional pode ser adaptada à área de atuação predominante,
+              ao perfil de clientes e à proposta de atendimento de cada advogado ou escritório.
             </p>
           </div>
         </div>
@@ -156,40 +242,40 @@
       <div class="section-shell">
         <div class="section-heading">
           <span class="section-label">ÁREAS DE ATUAÇÃO</span>
-          <h2 class="section-title">Soluções jurídicas para decisões importantes.</h2>
+          <h2 class="section-title">Frentes jurídicas apresentadas com clareza, técnica e autoridade.</h2>
         </div>
 
         <div class="practice-grid">
           <article class="practice-card">
             <span class="practice-number">01</span>
             <div class="practice-line"></div>
-            <h3>Direito Civil</h3>
-            <p>Atuação técnica em relações privadas, contratos, responsabilidades, cobranças e conflitos patrimoniais.</p>
-            <span class="practice-tag">Estratégia jurídica</span>
+            <h3>Direito Civil e Contratual</h3>
+            <p>Atuação em relações privadas, contratos, responsabilidades e demandas que exigem análise técnica e condução cuidadosa.</p>
+            <span class="practice-tag">Relações jurídicas</span>
           </article>
 
           <article class="practice-card">
             <span class="practice-number">02</span>
             <div class="practice-line"></div>
-            <h3>Direito Empresarial</h3>
-            <p>Assessoria jurídica para empresas, sócios e negócios que exigem segurança nas decisões.</p>
+            <h3>Direito Empresarial e Consultivo</h3>
+            <p>Orientação jurídica para empresas, sócios e negócios que precisam de segurança nas decisões e organização preventiva.</p>
             <span class="practice-tag">Negócios seguros</span>
           </article>
 
           <article class="practice-card">
             <span class="practice-number">03</span>
             <div class="practice-line"></div>
-            <h3>Direito Imobiliário</h3>
-            <p>Orientação em contratos, regularização, negociações, litígios e proteção patrimonial.</p>
-            <span class="practice-tag">Proteção patrimonial</span>
+            <h3>Família e Sucessões</h3>
+            <p>Atendimento em questões familiares, patrimoniais e sucessórias, com discrição, responsabilidade e sensibilidade.</p>
+            <span class="practice-tag">Cuidado e proteção</span>
           </article>
 
           <article class="practice-card">
             <span class="practice-number">04</span>
             <div class="practice-line"></div>
-            <h3>Consultoria Preventiva</h3>
-            <p>Análise estratégica para antecipar riscos, proteger decisões e reduzir conflitos futuros.</p>
-            <span class="practice-tag">Prevenção inteligente</span>
+            <h3>Imobiliário e Patrimonial</h3>
+            <p>Apoio jurídico em contratos, negociações, regularização e proteção de interesses relacionados a bens e patrimônio.</p>
+            <span class="practice-tag">Proteção patrimonial</span>
           </article>
         </div>
       </div>
@@ -198,55 +284,56 @@
     <section class="statement-section">
       <div class="statement-shell">
         <blockquote class="statement-quote">
-          “A boa advocacia não apenas responde problemas. Ela antecipa riscos, protege decisões e conduz caminhos.”
+          “Direito exige confiança, clareza e responsabilidade em cada decisão.”
         </blockquote>
-        <span class="statement-signature">Eduardo Advocacia</span>
+        <span class="statement-signature">Escritório de Advocacia</span>
       </div>
     </section>
 
     <section class="blog-preview-section" id="artigos">
       <div class="blog-preview-container">
         <div class="blog-preview-header">
-          <span class="section-label">ARTIGOS E INSIGHTS</span>
-          <h2>Conteúdo jurídico para decisões mais seguras.</h2>
+          <span class="section-label">ARTIGOS E ORIENTAÇÕES</span>
+          <h2>Conteúdo jurídico para informar, orientar e reforçar autoridade institucional.</h2>
           <p>
-            Análises, orientações e reflexões sobre temas jurídicos relevantes para pessoas, empresas e patrimônios.
+            Uma área pensada para publicar análises, esclarecimentos e temas relevantes
+            conforme a atuação do escritório.
           </p>
         </div>
 
         <div class="blog-grid">
           <article class="blog-card">
             <div class="blog-card-meta">
+              <span>Orientação Jurídica</span>
+              <span>Artigo</span>
+            </div>
+            <h3>Atendimento jurídico preventivo: quando buscar orientação antes do conflito?</h3>
+            <p>
+              Entenda como a orientação jurídica antecipada pode contribuir para decisões mais seguras e melhor organização das demandas.
+            </p>
+            <a href="#" class="blog-link">Ler artigo</a>
+          </article>
+
+          <article class="blog-card">
+            <div class="blog-card-meta">
               <span>Direito Civil</span>
               <span>Artigo</span>
             </div>
-            <h3>Como contratos bem elaborados reduzem riscos em relações privadas.</h3>
+            <h3>Contratos e segurança jurídica: o que observar antes de formalizar decisões importantes?</h3>
             <p>
-              Entenda por que a prevenção jurídica pode evitar conflitos, proteger interesses e trazer mais segurança às decisões.
+              Uma análise sobre pontos de atenção em contratos, responsabilidades e relações jurídicas do dia a dia.
             </p>
             <a href="#" class="blog-link">Ler artigo</a>
           </article>
 
           <article class="blog-card">
             <div class="blog-card-meta">
-              <span>Direito Empresarial</span>
+              <span>Planejamento</span>
               <span>Artigo</span>
             </div>
-            <h3>A importância da assessoria jurídica preventiva para empresas.</h3>
+            <h3>Patrimônio, família e empresa: por que o planejamento jurídico reduz riscos?</h3>
             <p>
-              Uma visão estratégica sobre como empresas podem reduzir riscos e tomar decisões com maior segurança jurídica.
-            </p>
-            <a href="#" class="blog-link">Ler artigo</a>
-          </article>
-
-          <article class="blog-card">
-            <div class="blog-card-meta">
-              <span>Direito Imobiliário</span>
-              <span>Artigo</span>
-            </div>
-            <h3>Cuidados jurídicos antes de comprar ou vender um imóvel.</h3>
-            <p>
-              Pontos essenciais para analisar contratos, documentação, riscos e garantias em negociações imobiliárias.
+              Veja como a organização jurídica pode auxiliar na proteção de interesses pessoais, familiares e empresariais.
             </p>
             <a href="#" class="blog-link">Ler artigo</a>
           </article>
@@ -262,6 +349,9 @@
               src="assets/balança.png"
               alt=""
               class="contact-visual-main"
+              decoding="async"
+              draggable="false"
+              loading="lazy"
             />
 
             <div class="contact-visual-shadow" aria-hidden="true"></div>
@@ -270,8 +360,8 @@
 
         <div class="contact-panel">
           <span class="section-label">CONTATO</span>
-          <h2 class="section-title">Entre em contato</h2>
-          <p class="contact-copy">Fale com o escritório para uma análise inicial do seu caso.</p>
+          <h2 class="section-title">Fale com o escritório.</h2>
+          <p class="contact-copy">Utilize o formulário para enviar sua mensagem. O atendimento pode ser direcionado conforme a natureza da demanda apresentada.</p>
 
           <form class="contact-form">
             <label class="field-group">
@@ -291,10 +381,10 @@
 
             <label class="field-group">
               <span>Mensagem</span>
-              <textarea name="mensagem" rows="5" placeholder="Conte brevemente sobre sua necessidade."></textarea>
+              <textarea name="mensagem" rows="5" placeholder="Descreva brevemente sua necessidade jurídica."></textarea>
             </label>
 
-            <button type="submit" class="contact-button">Enviar mensagem</button>
+            <button type="submit" class="contact-button">Entrar em contato</button>
           </form>
         </div>
       </div>
@@ -304,8 +394,8 @@
       <div class="footer-shell">
         <div class="footer-top">
           <div class="footer-brand">
-            <span class="footer-name">EDUARDO ADVOCACIA</span>
-            <p>Atuação jurídica com precisão técnica, presença institucional e orientação segura.</p>
+            <span class="footer-name">NOME DO ESCRITÓRIO</span>
+            <p>Atuação jurídica com clareza, discrição e presença institucional.</p>
           </div>
 
           <nav class="footer-links" aria-label="Links do rodapé">
@@ -316,14 +406,14 @@
           </nav>
 
           <div class="footer-contact">
-            <a href="mailto:atendimento@exemplo.com">atendimento@exemplo.com</a>
-            <a href="tel:+5500000000000">(00) 00000-0000</a>
+            <a href="mailto:contato@escritorio.com.br">contato@escritorio.com.br</a>
+            <a href="tel:+5547000000000">(47) 00000-0000</a>
           </div>
         </div>
 
         <div class="footer-bottom">
-          <span>© 2026 Eduardo Advocacia</span>
-          <span>Todos os direitos reservados.</span>
+          <span>© 2026 Nome do Escritório</span>
+          <span>Todos os direitos reservados. Este site possui caráter meramente informativo e não substitui uma consulta jurídica individualizada.</span>
         </div>
       </div>
     </footer>
