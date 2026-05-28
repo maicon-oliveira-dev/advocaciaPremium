@@ -37,6 +37,8 @@ let mobileMenuTouchStartScrollTop = 0;
 let mobileMenuIsDragging = false;
 let mobileMenuReturnFocusTarget = null;
 let lockedScrollY = 0;
+let pushedMenuHistoryState = false;
+let pendingMobileMenuCloseRequest = null;
 let destroyHeroMouseParallax = null;
 const isCompactViewport = compactViewportMedia.matches;
 const desktopHeroMediaQuery = "(min-width: 769px)";
@@ -590,6 +592,42 @@ const setMobileMenuBackgroundInert = (isInert) => {
   });
 };
 
+const pushMobileMenuHistoryState = () => {
+  if (pushedMenuHistoryState || typeof window.history?.pushState !== "function") {
+    return;
+  }
+
+  try {
+    const currentState =
+      history.state && typeof history.state === "object" ? history.state : {};
+
+    history.pushState({
+      ...currentState,
+      mobileMenuOpen: true
+    }, "");
+    pushedMenuHistoryState = true;
+  } catch (error) {
+    pushedMenuHistoryState = false;
+  }
+};
+
+const queueMobileMenuHistoryClose = (closeOptions) => {
+  if (!pushedMenuHistoryState || typeof window.history?.back !== "function") {
+    return false;
+  }
+
+  pendingMobileMenuCloseRequest = { ...closeOptions };
+  pushedMenuHistoryState = false;
+
+  try {
+    history.back();
+    return true;
+  } catch (error) {
+    pendingMobileMenuCloseRequest = null;
+    return false;
+  }
+};
+
 const lockPageScroll = () => {
   if (!body || body.dataset.scrollLocked === "true") {
     return;
@@ -750,6 +788,7 @@ const openMobileMenu = () => {
   if (mobileMenuInner) {
     mobileMenuInner.scrollTop = 0;
   }
+  pushMobileMenuHistoryState();
   setMobileMenuState(true);
   window.requestAnimationFrame(() => {
     if (isMobileMenuOpen) {
@@ -804,9 +843,27 @@ const openMobileMenu = () => {
   }, 0.14);
 };
 
-const closeMobileMenu = ({ immediate = false, focusToggle = false, afterClose = null } = {}) => {
+const closeMobileMenu = ({
+  immediate = false,
+  focusToggle = false,
+  afterClose = null,
+  fromPopState = false,
+  skipHistoryBack = false
+} = {}) => {
   if (!mobileMenu || mobileMenu.hidden) {
     return;
+  }
+
+  if (!fromPopState && !skipHistoryBack) {
+    const queuedHistoryClose = queueMobileMenuHistoryClose({
+      immediate,
+      focusToggle,
+      afterClose
+    });
+
+    if (queuedHistoryClose) {
+      return;
+    }
   }
 
   killMobileMenuAnimation();
@@ -821,6 +878,7 @@ const closeMobileMenu = ({ immediate = false, focusToggle = false, afterClose = 
     setMobileMenuState(false);
     clearMobileMenuTransforms();
     mobileMenuReturnFocusTarget = null;
+    pendingMobileMenuCloseRequest = null;
 
     if (typeof afterClose === "function") {
       afterClose();
@@ -1057,6 +1115,25 @@ if (mobileMenuToggle && mobileMenu && mobileMenuPanel) {
     }
 
     focusFirstMobileMenuElement();
+  });
+
+  window.addEventListener("popstate", () => {
+    const pendingCloseOptions = pendingMobileMenuCloseRequest;
+    pendingMobileMenuCloseRequest = null;
+
+    if (!isMobileMenuOpen) {
+      return;
+    }
+
+    pushedMenuHistoryState = false;
+    closeMobileMenu({
+      ...(pendingCloseOptions || {}),
+      fromPopState: true,
+      focusToggle:
+        pendingCloseOptions && "focusToggle" in pendingCloseOptions
+          ? pendingCloseOptions.focusToggle
+          : true
+    });
   });
 
   headerMenuBreakpoint.addEventListener("change", (event) => {
